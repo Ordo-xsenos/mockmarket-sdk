@@ -4,12 +4,12 @@ from typing import Any
 
 import httpx
 
-from mockmarket_sdk._analytics import AnalyticsClient
-from mockmarket_sdk._base import BaseClient
-from mockmarket_sdk._market import MarketDataClient
-from mockmarket_sdk._orders import OrdersClient
-from mockmarket_sdk._risk import RiskClient
-from mockmarket_sdk._sandboxes import SandboxesClient
+from mockmarket._analytics import AnalyticsClient
+from mockmarket._base import BaseClient
+from mockmarket._market import MarketDataClient
+from mockmarket._orders import OrdersClient
+from mockmarket._risk import RiskClient
+from mockmarket._sandboxes import SandboxesClient
 
 
 class MockMarketAsyncClient(BaseClient):

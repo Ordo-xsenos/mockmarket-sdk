@@ -14,7 +14,7 @@ uv add mockmarket-sdk
 
 ```python
 import asyncio
-from mockmarket_sdk import MockMarketAsyncClient, OrderCreate, SandboxCreate
+from mockmarket import MockMarketAsyncClient, OrderCreate, SandboxCreate
 
 
 async def main() -> None:

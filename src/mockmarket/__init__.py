@@ -1,12 +1,12 @@
-from mockmarket_sdk.client import MockMarketAsyncClient
-from mockmarket_sdk.exceptions import (
+from mockmarket.client import MockMarketAsyncClient
+from mockmarket.exceptions import (
     AuthenticationError,
     MockMarketAPIError,
     NotFoundError,
     RateLimitError,
     ValidationError,
 )
-from mockmarket_sdk.schemas import (
+from mockmarket.schemas import (
     BalanceResponse,
     Candle,
     LiquidationResponse,

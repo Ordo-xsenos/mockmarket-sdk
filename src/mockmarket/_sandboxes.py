@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from mockmarket_sdk._base import BaseClient
-from mockmarket_sdk.schemas import SandboxCreate, SandboxResponse, SandboxUpdate
+from mockmarket._base import BaseClient
+from mockmarket.schemas import SandboxCreate, SandboxResponse, SandboxUpdate
 
 
 class SandboxesClient(BaseClient):

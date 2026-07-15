@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+from typing import Any
 from uuid import UUID
 
-from mockmarket_sdk._base import BaseClient
-from mockmarket_sdk.schemas import (
+from mockmarket._base import BaseClient
+from mockmarket.schemas import (
     Candle,
     StockHistoryItem,
     StockProfile,
@@ -11,6 +12,16 @@ from mockmarket_sdk.schemas import (
     StockSearchResult,
     Tick,
 )
+
+
+def _extract_list(data: Any) -> list[Any]:
+    if isinstance(data, list):
+        return data
+    if isinstance(data, dict):
+        for v in data.values():
+            if isinstance(v, list):
+                return v
+    return []
 
 
 class MarketDataClient(BaseClient):
@@ -25,7 +36,7 @@ class MarketDataClient(BaseClient):
             f"/api/v1/market-data/{sandbox_id}/ticks",
             params={"symbol": symbol, "limit": limit},
         )
-        return [Tick.model_validate(item) for item in data]
+        return [Tick.model_validate(item) for item in _extract_list(data)]
 
     async def get_candles(
         self,
@@ -39,11 +50,11 @@ class MarketDataClient(BaseClient):
             f"/api/v1/market-data/{sandbox_id}/candles",
             params={"symbol": symbol, "interval": interval, "limit": limit},
         )
-        return [Candle.model_validate(item) for item in data]
+        return [Candle.model_validate(item) for item in _extract_list(data)]
 
     async def get_universe(self) -> list[str]:
         data = await self._request("GET", "/api/v1/market-data/stocks/universe")
-        return data if isinstance(data, list) else list(data)
+        return _extract_list(data)
 
     async def search_stocks(self, query: str) -> list[StockSearchResult]:
         data = await self._request(
@@ -51,7 +62,7 @@ class MarketDataClient(BaseClient):
             "/api/v1/market-data/stocks/search",
             params={"query": query},
         )
-        return [StockSearchResult.model_validate(item) for item in data]
+        return [StockSearchResult.model_validate(item) for item in _extract_list(data)]
 
     async def get_quote(self, symbol: str) -> StockQuote:
         data = await self._request("GET", f"/api/v1/market-data/stocks/{symbol}")
@@ -63,7 +74,7 @@ class MarketDataClient(BaseClient):
             f"/api/v1/market-data/stocks/{symbol}/history",
             params={"period": period},
         )
-        return [StockHistoryItem.model_validate(item) for item in data]
+        return [StockHistoryItem.model_validate(item) for item in _extract_list(data)]
 
     async def get_profile(self, symbol: str) -> StockProfile:
         data = await self._request("GET", f"/api/v1/market-data/stocks/{symbol}/profile")

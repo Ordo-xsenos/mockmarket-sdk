@@ -1,12 +1,12 @@
 import asyncio
 from uuid import UUID
 
-from mockmarket_sdk import MockMarketAsyncClient, OrderCreate, SandboxCreate
+from mockmarket import MockMarketAsyncClient, OrderCreate, SandboxCreate
 
 
 async def main() -> None:
     api_key = "YOUR_API_KEY_HERE"
-    sandbox_id: UUID | None = None
+    sandbox_id: UUID
 
     async with MockMarketAsyncClient(api_key, base_url="http://localhost:8000") as client:
         sandboxes = await client.sandboxes.list()

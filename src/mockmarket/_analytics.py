@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from mockmarket_sdk._base import BaseClient
-from mockmarket_sdk.schemas import PerformanceMetrics, PnLSummary, TradeHistoryItem
+from mockmarket._base import BaseClient
+from mockmarket.schemas import PerformanceMetrics, PnLSummary, TradeHistoryItem
 
 
 class AnalyticsClient(BaseClient):

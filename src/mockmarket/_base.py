@@ -4,7 +4,7 @@ from typing import Any
 
 import httpx
 
-from mockmarket_sdk.exceptions import (
+from mockmarket.exceptions import (
     AuthenticationError,
     MockMarketAPIError,
     NotFoundError,
