@@ -25,7 +25,9 @@ class OrdersClient(BaseClient):
         return [OrderResponse.model_validate(item) for item in data]
 
     async def create(self, params: OrderCreate) -> OrderResponse:
-        data = await self._request("POST", "/api/v1/orders", json_body=params.model_dump())
+        data = await self._request(
+            "POST", "/api/v1/orders", json_body=params.model_dump(mode="json")
+        )
         return OrderResponse.model_validate(data)
 
     async def get(self, order_id: UUID) -> OrderResponse:

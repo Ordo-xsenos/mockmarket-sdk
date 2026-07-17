@@ -123,20 +123,22 @@ class Tick(BaseModel):
 
 
 class Candle(BaseModel):
-    timestamp: datetime
+    timestamp: datetime = Field(alias="open_time")
     open: float
     high: float
     low: float
     close: float
     volume: float
+    model_config = {"populate_by_name": True}
 
 
 class StockQuote(BaseModel):
     symbol: str
-    price: float
+    price: float = Field(alias="current_price")
     change: float
-    change_pct: float
-    volume: float
+    change_pct: float = Field(alias="percent_change")
+    volume: float = 0
+    model_config = {"populate_by_name": True}
 
 
 class StockSearchResult(BaseModel):
