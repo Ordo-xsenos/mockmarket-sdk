@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import Any
+from uuid import UUID
 
 import httpx
 
@@ -10,6 +11,7 @@ from mockmarket._market import MarketDataClient
 from mockmarket._orders import OrdersClient
 from mockmarket._risk import RiskClient
 from mockmarket._sandboxes import SandboxesClient
+from mockmarket.schemas import OrderCreate
 
 
 class MockMarketAsyncClient(BaseClient):
@@ -36,6 +38,52 @@ class MockMarketAsyncClient(BaseClient):
         self.orders = OrdersClient(self._client, api_key)
         self.risk = RiskClient(self._client, api_key)
         self.analytics = AnalyticsClient(self._client, api_key)
+
+    async def get_sandbox_info(self, sandbox_id: str) -> dict:
+        sb = await self.sandboxes.get(UUID(sandbox_id))
+        return {
+            "budget": sb.budget,
+            "status": sb.status,
+            "fee_structure": sb.fee_structure,
+            "base_slippage_pct": sb.base_slippage_pct,
+            "commission_fee_pct": sb.commission_fee_pct,
+            "exchange_type": sb.exchange_type,
+        }
+
+    async def get_portfolio(self, sandbox_id: str) -> list[dict]:
+        positions = await self.risk.get_positions(UUID(sandbox_id))
+        return [
+            {
+                "symbol": p.symbol,
+                "quantity": p.quantity,
+                "entry_price": p.entry_price,
+                "current_price": p.current_price,
+                "unrealized_pnl": p.unrealized_pnl,
+            }
+            for p in positions
+        ]
+
+    async def get_price(self, symbol: str) -> float:
+        quote = await self.market.get_quote(symbol)
+        return quote.price
+
+    async def place_order(self, sandbox_id: str, symbol: str, side: str, quantity: int) -> dict:
+        order = await self.orders.create(OrderCreate(
+            sandbox_id=UUID(sandbox_id),
+            symbol=symbol,
+            side=side,
+            order_type="market",
+            quantity=float(quantity),
+        ))
+        return {
+            "order_id": str(order.id),
+            "status": order.status,
+            "side": order.side,
+            "symbol": order.symbol,
+            "quantity": order.quantity,
+            "filled_price": order.filled_price,
+            "reject_reason": order.reject_reason,
+        }
 
     async def __aenter__(self) -> MockMarketAsyncClient:
         return self

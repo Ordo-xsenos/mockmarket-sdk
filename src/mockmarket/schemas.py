@@ -21,7 +21,9 @@ class SandboxUpdate(BaseModel):
 class SandboxResponse(BaseModel):
     id: UUID
     name: str
+    exchange_type: str
     fee_structure: str
+    budget: float
     base_slippage_pct: float
     latency_ms: int
     commission_fee_pct: float

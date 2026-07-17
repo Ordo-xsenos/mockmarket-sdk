@@ -21,9 +21,6 @@ jobs:
       - name: Install dependencies
         run: uv sync
 
-      - name: Secondary dependencies
-        run: uv add --dev ruff mypy
-
       - name: Ruff check
         run: uv run ruff check src/
 
