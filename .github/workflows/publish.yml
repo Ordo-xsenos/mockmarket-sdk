@@ -1,9 +1,10 @@
-name: Publish to PyPI
+name: CI & Publish
 
 on:
   push:
-    tags:
-      - "v*"
+    branches: ["*"]
+  pull_request:
+    branches: ["*"]
 
 jobs:
   quality:
@@ -16,7 +17,7 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
-          python-version: "3.14"
+          python-version: "3.13"
 
       - name: Install dependencies
         run: uv sync
@@ -29,6 +30,7 @@ jobs:
 
   publish:
     name: Build and publish package
+    if: startsWith(github.ref, 'refs/tags/v')
     needs: quality
     runs-on: ubuntu-latest
     permissions:
@@ -41,7 +43,7 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
-          python-version: "3.14"
+          python-version: "3.13"
 
       - name: Build distribution
         run: uv build
