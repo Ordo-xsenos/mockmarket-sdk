@@ -7,7 +7,7 @@ Built with `httpx` + `pydantic` v2.
 ## Installation
 
 ```bash
-uv add mockmarket-sdk
+uv add mockmarket
 ```
 
 ## Quick Start
