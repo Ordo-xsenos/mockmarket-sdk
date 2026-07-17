@@ -6,7 +6,7 @@ resolution-markers = [
     "python_full_version < '3.15'",
 ]
 
-[[package]]
+[[package]]Из-за этого шаг Ruff check падает с системной ошибкой No such file or directory (os error 2) — раннер пытается запустить ruff, но такого файла в виртуальном окружении не существует
 name = "annotated-types"
 version = "0.7.0"
 source = { registry = "https://pypi.org/simple" }

@@ -1,6 +1,6 @@
 [project]
 name = "mockmarket"
-version = "0.1.2"
+version = "0.1.3"
 description = "Async Python SDK for the MockMarket algorithmic trading sandbox"
 readme = "README.md"
 authors = [
