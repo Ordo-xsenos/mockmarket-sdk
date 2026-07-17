@@ -39,7 +39,7 @@ class MockMarketAsyncClient(BaseClient):
         self.risk = RiskClient(self._client, api_key)
         self.analytics = AnalyticsClient(self._client, api_key)
 
-    async def get_sandbox_info(self, sandbox_id: str) -> dict:
+    async def get_sandbox_info(self, sandbox_id: str) -> dict[str, Any]:
         sb = await self.sandboxes.get(UUID(sandbox_id))
         return {
             "budget": sb.budget,
@@ -50,7 +50,7 @@ class MockMarketAsyncClient(BaseClient):
             "exchange_type": sb.exchange_type,
         }
 
-    async def get_portfolio(self, sandbox_id: str) -> list[dict]:
+    async def get_portfolio(self, sandbox_id: str) -> list[dict[str, Any]]:
         positions = await self.risk.get_positions(UUID(sandbox_id))
         return [
             {
@@ -67,7 +67,9 @@ class MockMarketAsyncClient(BaseClient):
         quote = await self.market.get_quote(symbol)
         return quote.price
 
-    async def place_order(self, sandbox_id: str, symbol: str, side: str, quantity: int) -> dict:
+    async def place_order(
+        self, sandbox_id: str, symbol: str, side: str, quantity: int
+    ) -> dict[str, Any]:
         order = await self.orders.create(OrderCreate(
             sandbox_id=UUID(sandbox_id),
             symbol=symbol,
