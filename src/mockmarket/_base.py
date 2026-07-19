@@ -6,6 +6,7 @@ import httpx
 
 from mockmarket.exceptions import (
     AuthenticationError,
+    ConflictError,
     MockMarketAPIError,
     NotFoundError,
     RateLimitError,
@@ -60,6 +61,8 @@ class BaseClient:
                 detail = str(body.get("detail", body))
             except Exception:
                 detail = response.text
+            if response.status_code == 409:
+                raise ConflictError(detail)
             raise ValidationError(detail)
         if response.status_code >= 500:
             raise MockMarketAPIError(response.status_code, response.text or None)

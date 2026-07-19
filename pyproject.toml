@@ -1,7 +1,7 @@
 [project]
 name = "mockmarket"
-version = "0.1.5"
-description = "Async Python SDK for the MockMarket algorithmic trading sandbox"
+version = "0.2.0"
+description = "Async Python SDK for the MockMarket reactive exchange simulator"
 readme = "README.md"
 authors = [
     { name = "xsenos", email = "chel.pchelov2010@gmail.com" }

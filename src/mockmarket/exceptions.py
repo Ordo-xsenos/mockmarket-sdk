@@ -20,6 +20,13 @@ class NotFoundError(MockMarketAPIError):
         super().__init__(404, detail or "Resource not found")
 
 
+class ConflictError(MockMarketAPIError):
+    """409 — an invalid lifecycle transition (e.g. pausing a sandbox before start)."""
+
+    def __init__(self, detail: str | None = None) -> None:
+        super().__init__(409, detail or "Conflict")
+
+
 class ValidationError(MockMarketAPIError):
     def __init__(self, detail: str | None = None) -> None:
         super().__init__(422, detail or "Validation error")
