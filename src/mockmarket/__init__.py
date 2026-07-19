@@ -1,3 +1,4 @@
+from mockmarket._arena import ArenaClient, Sandbox
 from mockmarket.client import MockMarketAsyncClient
 from mockmarket.exceptions import (
     AuthenticationError,
@@ -8,8 +9,22 @@ from mockmarket.exceptions import (
 )
 from mockmarket.schemas import (
     BalanceResponse,
+    BookLevel,
     Candle,
+    EngineAccount,
+    EngineApiKey,
+    EngineMarketMakerConfig,
+    EngineNoiseConfig,
+    EngineOrder,
+    EngineOrderCreate,
+    EngineReferenceConfig,
+    EngineSandbox,
+    EngineSandboxConfig,
+    EngineSandboxCreate,
+    EngineTrade,
+    LeaderboardEntry,
     LiquidationResponse,
+    OrderBook,
     OrderCreate,
     OrderResponse,
     PerformanceMetrics,
@@ -22,6 +37,7 @@ from mockmarket.schemas import (
     StockProfile,
     StockQuote,
     StockSearchResult,
+    StreamMessage,
     Tick,
     TradeHistoryItem,
 )
@@ -50,4 +66,22 @@ __all__ = [
     "StockSearchResult",
     "StockProfile",
     "StockHistoryItem",
+    # Reactive engine (/v1)
+    "ArenaClient",
+    "Sandbox",
+    "EngineSandboxCreate",
+    "EngineSandbox",
+    "EngineSandboxConfig",
+    "EngineReferenceConfig",
+    "EngineMarketMakerConfig",
+    "EngineNoiseConfig",
+    "EngineOrderCreate",
+    "EngineOrder",
+    "EngineAccount",
+    "EngineTrade",
+    "BookLevel",
+    "OrderBook",
+    "LeaderboardEntry",
+    "EngineApiKey",
+    "StreamMessage",
 ]

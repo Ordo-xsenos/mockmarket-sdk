@@ -6,6 +6,7 @@ from uuid import UUID
 import httpx
 
 from mockmarket._analytics import AnalyticsClient
+from mockmarket._arena import ArenaClient
 from mockmarket._base import BaseClient
 from mockmarket._market import MarketDataClient
 from mockmarket._orders import OrdersClient
@@ -38,6 +39,8 @@ class MockMarketAsyncClient(BaseClient):
         self.orders = OrdersClient(self._client, api_key)
         self.risk = RiskClient(self._client, api_key)
         self.analytics = AnalyticsClient(self._client, api_key)
+        # Reactive engine (/v1) — live order book, challenges, leaderboard.
+        self.arena = ArenaClient(self._client, api_key)
 
     async def get_sandbox_info(self, sandbox_id: str) -> dict[str, Any]:
         sb = await self.sandboxes.get(UUID(sandbox_id))
