@@ -11,7 +11,12 @@ class AuthenticationError(MockMarketAPIError):
 
 
 class RateLimitError(MockMarketAPIError):
-    def __init__(self, detail: str | None = None) -> None:
+    """429 — too many requests. ``retry_after`` is the server's suggested wait in
+    seconds (from the ``Retry-After`` header) when available. Raised only after the
+    client's automatic backoff retries are exhausted."""
+
+    def __init__(self, detail: str | None = None, retry_after: float | None = None) -> None:
+        self.retry_after = retry_after
         super().__init__(429, detail or "Rate limit exceeded")
 
 
