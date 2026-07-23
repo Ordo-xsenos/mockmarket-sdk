@@ -11,8 +11,21 @@ class AuthenticationError(MockMarketAPIError):
 
 
 class RateLimitError(MockMarketAPIError):
-    def __init__(self, detail: str | None = None) -> None:
+    """429 — too many requests. ``retry_after`` is the server's suggested wait in
+    seconds (from the ``Retry-After`` header) when available. Raised only after the
+    client's automatic backoff retries are exhausted."""
+
+    def __init__(self, detail: str | None = None, retry_after: float | None = None) -> None:
+        self.retry_after = retry_after
         super().__init__(429, detail or "Rate limit exceeded")
+
+
+class ForbiddenError(MockMarketAPIError):
+    """403 — authenticated but not allowed, e.g. a tier quota exceeded
+    (``sandbox limit reached for your tier``)."""
+
+    def __init__(self, detail: str | None = None) -> None:
+        super().__init__(403, detail or "Forbidden")
 
 
 class NotFoundError(MockMarketAPIError):

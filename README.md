@@ -77,9 +77,28 @@ if order.is_rejected:
     print("rejected:", order.reject_reason)
 ```
 
-HTTP failures raise `MockMarketAPIError` subclasses: `AuthenticationError` (401/403),
+HTTP failures raise `MockMarketAPIError` subclasses: `AuthenticationError` (401),
+`ForbiddenError` (403, e.g. a tier quota — `sandbox limit reached for your tier`),
 `NotFoundError` (404), `ConflictError` (409, e.g. pausing before start),
 `RateLimitError` (429), `ValidationError` (422).
+
+## Rate limiting (automatic backoff)
+
+On HTTP `429` the client **retries automatically**, honouring the server's
+`Retry-After` header when present, otherwise an exponential backoff with full
+jitter. `RateLimitError` is raised only after the retries are exhausted, and it
+carries `retry_after` (seconds) when the server provided it.
+
+```python
+# Defaults: retry up to 3 times. Tune or disable per client:
+mm = MockMarketAsyncClient("mk_...", max_retries=5, backoff_base=0.5, backoff_max=30.0)
+mm = MockMarketAsyncClient("mk_...", max_retries=0)   # disable → handle 429 yourself
+
+try:
+    await sb.market_buy(10)
+except RateLimitError as e:
+    print("still limited; server suggests waiting", e.retry_after, "s")
+```
 
 ## Live stream (WebSocket)
 

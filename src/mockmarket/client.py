@@ -49,6 +49,9 @@ class MockMarketAsyncClient(BaseClient):
         base_url: str = "http://localhost:8000",
         *,
         httpx_kwargs: dict[str, Any] | None = None,
+        max_retries: int = 3,
+        backoff_base: float = 0.5,
+        backoff_max: float = 30.0,
     ) -> None:
         self._api_key = api_key
         self._base_url = base_url.rstrip("/")
@@ -60,7 +63,16 @@ class MockMarketAsyncClient(BaseClient):
         if httpx_kwargs:
             client_kwargs.update(httpx_kwargs)
         self._client: httpx.AsyncClient = httpx.AsyncClient(**client_kwargs)
-        super().__init__(self._client, api_key)
+        # On HTTP 429 the client automatically backs off and retries (honouring the
+        # server's Retry-After header); RateLimitError is raised only if retries run
+        # out. Set max_retries=0 to disable and handle 429 yourself.
+        super().__init__(
+            self._client,
+            api_key,
+            max_retries=max_retries,
+            backoff_base=backoff_base,
+            backoff_max=backoff_max,
+        )
 
     async def __aenter__(self) -> MockMarketAsyncClient:
         return self
