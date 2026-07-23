@@ -20,6 +20,14 @@ class RateLimitError(MockMarketAPIError):
         super().__init__(429, detail or "Rate limit exceeded")
 
 
+class ForbiddenError(MockMarketAPIError):
+    """403 — authenticated but not allowed, e.g. a tier quota exceeded
+    (``sandbox limit reached for your tier``)."""
+
+    def __init__(self, detail: str | None = None) -> None:
+        super().__init__(403, detail or "Forbidden")
+
+
 class NotFoundError(MockMarketAPIError):
     def __init__(self, detail: str | None = None) -> None:
         super().__init__(404, detail or "Resource not found")

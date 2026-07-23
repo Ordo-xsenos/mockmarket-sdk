@@ -77,7 +77,8 @@ if order.is_rejected:
     print("rejected:", order.reject_reason)
 ```
 
-HTTP failures raise `MockMarketAPIError` subclasses: `AuthenticationError` (401/403),
+HTTP failures raise `MockMarketAPIError` subclasses: `AuthenticationError` (401),
+`ForbiddenError` (403, e.g. a tier quota — `sandbox limit reached for your tier`),
 `NotFoundError` (404), `ConflictError` (409, e.g. pausing before start),
 `RateLimitError` (429), `ValidationError` (422).
 

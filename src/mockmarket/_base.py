@@ -10,6 +10,7 @@ import httpx
 from mockmarket.exceptions import (
     AuthenticationError,
     ConflictError,
+    ForbiddenError,
     MockMarketAPIError,
     NotFoundError,
     RateLimitError,
@@ -22,11 +23,16 @@ def _parse_retry_after(value: str | None) -> float | None:
     if not value:
         return None
     value = value.strip()
+    if not value:
+        return None
     try:
         return max(0.0, float(value))
     except ValueError:
         pass
-    parsed = email.utils.parsedate_to_datetime(value)
+    try:
+        parsed = email.utils.parsedate_to_datetime(value)
+    except (ValueError, TypeError):
+        return None
     if parsed is None:
         return None
     import datetime as _dt
@@ -57,7 +63,9 @@ class BaseClient:
         self._backoff_max = backoff_max
 
     def _build_url(self, path: str) -> str:
-        return f"{self._client.base_url}{path}".rstrip("/")
+        base = str(self._client.base_url).rstrip("/")
+        clean_path = path.lstrip("/")
+        return f"{base}/{clean_path}"
 
     def _retry_delay(self, response: httpx.Response, attempt: int) -> float:
         """Seconds to wait before retrying a 429 on ``attempt`` (0-indexed)."""
@@ -104,7 +112,7 @@ class BaseClient:
         if response.status_code == 401:
             raise AuthenticationError(response.text or None)
         if response.status_code == 403:
-            raise AuthenticationError(response.text or None)
+            raise ForbiddenError(response.text or None)
         if response.status_code == 404:
             raise NotFoundError(response.text or None)
         if response.status_code == 429:

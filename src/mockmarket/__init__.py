@@ -3,6 +3,7 @@ from mockmarket.client import MockMarketAsyncClient
 from mockmarket.exceptions import (
     AuthenticationError,
     ConflictError,
+    ForbiddenError,
     MockMarketAPIError,
     NotFoundError,
     RateLimitError,
@@ -33,6 +34,7 @@ __all__ = [
     # exceptions
     "MockMarketAPIError",
     "AuthenticationError",
+    "ForbiddenError",
     "RateLimitError",
     "NotFoundError",
     "ConflictError",
